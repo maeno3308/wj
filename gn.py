@@ -652,9 +652,6 @@ def 배민_품절해제(driver):
     rdtime_23()
     배너클릭(driver)
     rdtime_12()
-
-
-
 #####################배민품절 해제
     try:
         판매상태 = driver.find_element(By.XPATH, '//span[text()="판매상태"]').click()
@@ -668,24 +665,26 @@ def 배민_품절해제(driver):
 
 ##################배민피자품절해제
     try:
-        가게클릭 = driver.find_elements(By.CSS_SELECTOR, '.css-6vg3wo')
-        가게클릭[0].click()
-        rdtime_23()
-        배민피자선택 = driver.find_elements(By.CSS_SELECTOR, '.bsds-action-sheet-overlay.css-fowwyy')
-        배민피자선택[3].click()
-        rdtime_23()
+        # 가게클릭 = driver.find_elements(By.CSS_SELECTOR, '.css-6vg3wo')
+        # 가게클릭[0].click()
+        # rdtime_23()
+        # 배민피자선택 = driver.find_elements(By.CSS_SELECTOR, '.bsds-action-sheet-overlay.css-fowwyy')
+        # 배민피자선택[3].click()
+        # rdtime_23()
+        배민피자선태(driver)
         배민옵션품절해제(driver)
     except:
         rdtime_12()
 
 #####################배민1 품절해제
     try:
-        가게클릭 = driver.find_elements(By.CSS_SELECTOR, '.css-6vg3wo')
-        가게클릭[0].click()
-        rdtime_12()
-        배민1선택 = driver.find_elements(By.CSS_SELECTOR, '.bsds-action-sheet-overlay.css-fowwyy')
-        배민1선택[4].click()
-        rdtime_23()
+        # 가게클릭 = driver.find_elements(By.CSS_SELECTOR, '.css-6vg3wo')
+        # 가게클릭[0].click()
+        # rdtime_12()
+        # 배민1선택 = driver.find_elements(By.CSS_SELECTOR, '.bsds-action-sheet-overlay.css-fowwyy')
+        # 배민1선택[4].click()
+        # rdtime_23()
+        배민원선택(driver)
         배민옵션품절해제(driver)
     except:
         rdtime_12()
@@ -711,29 +710,51 @@ def 배민_품절해제(driver):
         rdtime_12()
 ###################배민피자옵션 품절해제
     try:
-        가게클릭 = driver.find_elements(By.CSS_SELECTOR, '.css-6vg3wo')
-        가게클릭[0].click()
-        rdtime_23()
-        배민피자선택 = driver.find_elements(By.CSS_SELECTOR, '.bsds-action-sheet-overlay.css-fowwyy')
-        배민피자선택[3].click()
-        rdtime_23()    
+        배민피자선태(driver)
+        # 가게클릭 = driver.find_elements(By.CSS_SELECTOR, '.css-6vg3wo')
+        # 가게클릭[0].click()
+        # rdtime_23()
+        # 배민피자선택 = driver.find_elements(By.CSS_SELECTOR, '.bsds-action-sheet-overlay.css-fowwyy')
+        # 배민피자선택[3].click()
+        # rdtime_23()    
         배민옵션품절해제(driver)
     except:
         rdtime_12()
 
 ###################배민1옵션 품절해제
     try:
+        # 가게클릭 = driver.find_elements(By.CSS_SELECTOR, '.css-6vg3wo')
+        # 가게클릭[0].click()
+        # rdtime_12()
+        # 배민1선택 = driver.find_elements(By.CSS_SELECTOR, '.bsds-action-sheet-overlay.css-fowwyy')
+        # 배민1선택[4].click()
+        # rdtime_23()
+        배민원선택(driver)
+        배민옵션품절해제(driver)
+    except:
+        rdtime_12()    
+
+    return
+
+def 배민피자선태(driver):
+        가게클릭 = driver.find_elements(By.CSS_SELECTOR, '.css-6vg3wo')
+        가게클릭[0].click()
+        rdtime_23()
+        배민피자선택 = driver.find_elements(By.CSS_SELECTOR, '.bsds-action-sheet-overlay.css-fowwyy')
+        배민피자선택[3].click()
+        rdtime_23()
+        return
+
+def 배민원선택(driver):
         가게클릭 = driver.find_elements(By.CSS_SELECTOR, '.css-6vg3wo')
         가게클릭[0].click()
         rdtime_12()
         배민1선택 = driver.find_elements(By.CSS_SELECTOR, '.bsds-action-sheet-overlay.css-fowwyy')
         배민1선택[4].click()
         rdtime_23()
-        배민옵션품절해제(driver)
-    except:
-        rdtime_12()    
+        return
 
-    return
+
 
 def 땡겨요_품절해제(driver):
     rdtime_23()
@@ -1621,11 +1642,11 @@ gn_ck = tk.IntVar()
 # 배달비기본.place(x=320,y=150)
 
 
+with open ('notice.txt','r',encoding='UTF8') as f:
+    notice = f.read()
 text_box  = tk.Text(win, width=70, height=25)
 text_box.place(x=20,y=200)
-# with open ('notice.txt','r',encoding='UTF8') as f:
-#     notice = f.read()
-#     text_box.insert('end', notice)
+text_box.insert('end', notice)
 
 
 
