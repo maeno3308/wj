@@ -107,7 +107,7 @@ def 오늘만품절 ():
 
 def 배민_오늘만품절(driver):
     rdtime_23()
-    배너클릭(driver)
+    배너클릭(driver,1)
     rdtime_23()
     ###################검색어입력
     배민검색어(driver)
@@ -153,12 +153,13 @@ def 배민_오늘만품절(driver):
         else:
             break
 ######굽네피자 품절
-    매장선택 = driver.find_elements(By.CSS_SELECTOR,'.css-6vg3wo')
-    매장선택[0].click()
-    rdtime_23()
-    굽네피자 = driver.find_elements(By.CSS_SELECTOR,'.bsds-action-sheet-item.css-1gagrh8')
-    굽네피자[1].click()
-    rdtime_23()
+    # 매장선택 = driver.find_elements(By.CSS_SELECTOR,'.css-6vg3wo')
+    # 매장선택[0].click()
+    # rdtime_23()
+    # 굽네피자 = driver.find_elements(By.CSS_SELECTOR,'.bsds-action-sheet-item.css-1gagrh8')
+    # 굽네피자[1].click()
+    # rdtime_23()
+    배민피자선택(driver)
 
     count = 0
     while True:
@@ -178,12 +179,13 @@ def 배민_오늘만품절(driver):
             break        
 
 ########배민원 품절
-    매장선택 = driver.find_elements(By.CSS_SELECTOR,'.css-6vg3wo')
-    매장선택[0].click()
-    rdtime_23()
-    배민1 = driver.find_elements(By.CSS_SELECTOR,'.bsds-action-sheet-item.css-1gagrh8')
-    배민1[2].click()
-    rdtime_23()
+    # 매장선택 = driver.find_elements(By.CSS_SELECTOR,'.css-6vg3wo')
+    # 매장선택[0].click()
+    # rdtime_23()
+    # 배민1 = driver.find_elements(By.CSS_SELECTOR,'.bsds-action-sheet-item.css-1gagrh8')
+    # 배민1[2].click()
+    # rdtime_23()
+    배민원선택(driver)
 
     count = 0
     while True:
@@ -272,14 +274,15 @@ def 배민_오늘만품절(driver):
             time.sleep(1)
 
 ############################굽네파자 옵션품절
-    rdtime_12()
-    매장선택 = driver.find_elements(By.CSS_SELECTOR,'.baesisi-icon.bsds-icon.css-1bu3lxy')
-    매장선택[0].click()
-    rdtime_23()
-    굽네피자 = driver.find_elements(By.CSS_SELECTOR,'.bsds-action-sheet-item.css-1gagrh8')
-    굽네피자[1].click()
-    rdtime_23()
-    rdtime_12()
+    # rdtime_12()
+    # 매장선택 = driver.find_elements(By.CSS_SELECTOR,'.baesisi-icon.bsds-icon.css-1bu3lxy')
+    # 매장선택[0].click()
+    # rdtime_23()
+    # 굽네피자 = driver.find_elements(By.CSS_SELECTOR,'.bsds-action-sheet-item.css-1gagrh8')
+    # 굽네피자[1].click()
+    # rdtime_23()
+    # rdtime_12()
+    배민피자선택(driver)
 
     count = 0
     while True:
@@ -327,13 +330,14 @@ def 배민_오늘만품절(driver):
 
 
 ################################배민원옵션품절
-    rdtime_23()
-    매장선택 = driver.find_elements(By.CSS_SELECTOR,'.baesisi-icon.bsds-icon.css-1bu3lxy')
-    매장선택[0].click()
-    rdtime_23()
-    배민1 = driver.find_elements(By.CSS_SELECTOR,'.bsds-action-sheet-item.css-1gagrh8')
-    배민1[2].click()
-    rdtime_23()
+    # rdtime_23()
+    # 매장선택 = driver.find_elements(By.CSS_SELECTOR,'.baesisi-icon.bsds-icon.css-1bu3lxy')
+    # 매장선택[0].click()
+    # rdtime_23()
+    # 배민1 = driver.find_elements(By.CSS_SELECTOR,'.bsds-action-sheet-item.css-1gagrh8')
+    # 배민1[2].click()
+    # rdtime_23()
+    배민원선택(driver)
 
     count = 0
     while True:
@@ -384,7 +388,7 @@ def 배민_오늘만품절(driver):
 
 def 땡겨요_오늘만품절(driver):
     검색어 = 엔트리.get()
-    배너클릭(driver)
+    배너클릭(driver,2)
     rdtime_23()
 ##########################배너클릭후 품절페이지 이동
     try:
@@ -442,7 +446,7 @@ def 땡겨요_오늘만품절(driver):
 
 def 요기요_오늘만품절(driver):
     검색어 = 엔트리.get()
-    배너클릭(driver)    
+    배너클릭(driver,3)    
     #######################메뉴품절
     rdtime_23()
     try:
@@ -490,7 +494,7 @@ def 쿠팡_오늘만품절(driver):
 
     driver.get('https://store.coupangeats.com/merchant/management/menu/')
     rdtime_23()
-    배너클릭(driver)
+    배너클릭(driver,4)
     rdtime_23()
     try:
         배너닫기 = driver.find_element(By.CSS_SELECTOR, '.dialog-modal-wrapper__body--close-button').click()
@@ -548,7 +552,7 @@ def 굽네_오늘만품절(driver):
 
         driver.get('http://office.goobne.co.kr:9494/office/menu/soldout_list')
         rdtime_23()
-        배너클릭(driver)
+        배너클릭(driver,5)
         rdtime_23()
         판매여부 = driver.find_element(By.XPATH, '//span[text() = "선택"]').click()
         rdtime_23()
@@ -640,7 +644,7 @@ def 품절해제 ():
                 driver = 굽네로그인()
                 굽네_품절해제(driver)
         else:
-            text_box.insert('end','취소했습니다\n') #문자열마직막줄에 입력3
+            text_box.insert('end','품절 해제를 취소했습니다\n') #문자열마직막줄에 입력3
     return
 
 def 배민_품절해제(driver):
@@ -650,7 +654,7 @@ def 배민_품절해제(driver):
     except:
         rdtime_23()
     rdtime_23()
-    배너클릭(driver)
+    배너클릭(driver,1)
     rdtime_12()
 #####################배민품절 해제
     try:
@@ -671,7 +675,7 @@ def 배민_품절해제(driver):
         # 배민피자선택 = driver.find_elements(By.CSS_SELECTOR, '.bsds-action-sheet-overlay.css-fowwyy')
         # 배민피자선택[3].click()
         # rdtime_23()
-        배민피자선태(driver)
+        배민피자선택(driver)
         배민옵션품절해제(driver)
     except:
         rdtime_12()
@@ -710,7 +714,7 @@ def 배민_품절해제(driver):
         rdtime_12()
 ###################배민피자옵션 품절해제
     try:
-        배민피자선태(driver)
+        배민피자선택(driver)
         # 가게클릭 = driver.find_elements(By.CSS_SELECTOR, '.css-6vg3wo')
         # 가게클릭[0].click()
         # rdtime_23()
@@ -736,7 +740,7 @@ def 배민_품절해제(driver):
 
     return
 
-def 배민피자선태(driver):
+def 배민피자선택(driver):
         가게클릭 = driver.find_elements(By.CSS_SELECTOR, '.css-6vg3wo')
         가게클릭[0].click()
         rdtime_23()
@@ -758,7 +762,7 @@ def 배민원선택(driver):
 
 def 땡겨요_품절해제(driver):
     rdtime_23()
-    배너클릭(driver)
+    배너클릭(driver,2)
     rdtime_23()
 ###################땡겨요품절해제
     try:
@@ -796,7 +800,7 @@ def 요기요_품절해제(driver):
         rdtime_23()
 
     rdtime_23()
-    배너클릭(driver)
+    배너클릭(driver,3)
     rdtime_23()
 
     try:
@@ -837,7 +841,7 @@ def 쿠팡_품절해제(driver):
     driver.get('https://store.coupangeats.com/merchant/management/menu/')
     rdtime_23()
     rdtime_23()
-    배너클릭(driver)
+    배너클릭(driver,4)
 
 ################################메뉴품절
     검색어입력 = driver.find_element(By.XPATH, '//input[@placeholder="검색"]').send_keys('맵달')
@@ -874,9 +878,7 @@ def 쿠팡_품절해제(driver):
 
 
 def 굽네_품절해제(driver):
-    # rdtime_23()
-    # 배너클릭(driver)
-    # rdtime_23()
+    # 배너클릭(driver,5)
     ######################굽네홈 품절해제
     try:
         검색어 = 엔트리.get()
@@ -961,7 +963,7 @@ def 배민_일시정지(driver):
     #####################일시정지
     driver.get('https://self.baemin.com/shops')
     rdtime_23()
-    배너클릭(driver)
+    배너클릭(driver,1)
     try:
         rdtime_23()
         전체영업중지 = driver.find_element(By.CSS_SELECTOR, '#btn-shop-all-suspend').click()
@@ -976,7 +978,7 @@ def 배민_일시정지(driver):
 def 땡겨요_일시정지(driver):
     #############################영업 임시중지
     rdtime_12()
-    배너클릭(driver)
+    배너클릭(driver,2)
     rdtime_23()
     try:
         rdtime_23()
@@ -1002,7 +1004,7 @@ def 요기요_일시정지(driver):
         rdtime_23()
     except:
         rdtime_23()
-    배너클릭(driver)
+    배너클릭(driver,3)
     rdtime_23()
 
     try:
@@ -1017,12 +1019,11 @@ def 요기요_일시정지(driver):
 def 쿠팡_일시정지(driver):
     rdtime_12()
     # 배너클릭(driver)
-    # rdtime_23()
     return
 
 def 굽네_일시정지(driver):
     rdtime_12()
-    배너클릭(driver)
+    배너클릭(driver,5)
     rdtime_12()
     try:
         rdtime_23()
@@ -1080,7 +1081,7 @@ def 댓글달기():
 def 배민_댓글달기(driver):
     #############################배너클릭중지
     rdtime_12()
-    배너클릭(driver)
+    배너클릭(driver,1)
     rdtime_23()
 
 #############배민댓글달기
@@ -1152,7 +1153,7 @@ def 배민_댓글달기(driver):
 def 땡겨요_댓글달기(driver):
     #############################배너클릭중지
     rdtime_12()
-    배너클릭(driver)
+    배너클릭(driver,2)
     rdtime_23()
 # ##############땡겨요 댓글달기
 
@@ -1193,7 +1194,7 @@ def 땡겨요_댓글달기(driver):
 def 요기요_댓글달기(driver):
     #############################요기요 배너클릭
     rdtime_12()
-    배너클릭(driver)
+    배너클릭(driver,3)
     rdtime_23()
 
 ##############요기요 댓글달기
@@ -1245,7 +1246,7 @@ def 요기요_댓글달기(driver):
 def 쿠팡_댓글달기(driver):
     #############################배너클릭중지
     rdtime_12()
-    배너클릭(driver)
+    배너클릭(driver,5)
     rdtime_23()
     #############쿠팡댓글달기
     try:
@@ -1350,60 +1351,96 @@ def 배달비올리기():
 
 
 
-def 배너클릭(driver):
+def 배너클릭(driver,판매채널):
     with open("banner.txt","r",encoding="UTF8") as f:
         banner = f.readlines()
         banner = [line.rstrip('\n') for line in banner]
-    try:
-        배너클릭 = driver.find_element(By.CSS_SELECTOR, banner[0]).click()
-        time.sleep(2)
-    except:
-        time.sleep(0.3)
-    try:
-        배너클릭 = driver.find_element(By.CSS_SELECTOR, banner[1]).click()
-        time.sleep(2)
-    except:
-        time.sleep(0.3)
-    try:
-        배너클릭 = driver.find_element(By.CSS_SELECTOR, banner[2]).click()
-        time.sleep(2)
-    except:
-        time.sleep(0.3)
-    try:
-        배너클릭 = driver.find_element(By.CSS_SELECTOR, banner[3]).click()
-        time.sleep(2)
-    except:
-        time.sleep(0.3)
-    try:
-        배너클릭 = driver.find_element(By.CSS_SELECTOR, banner[4]).click()
-        time.sleep(2)
-    except:
-        time.sleep(0.3)
-    try:
-        배너클릭 = driver.find_element(By.CSS_SELECTOR, banner[5]).click()
-        time.sleep(2)
-    except:
-        time.sleep(0.3)
-    try:
-        배너클릭 = driver.find_element(By.CSS_SELECTOR, banner[6]).click()
-        time.sleep(2)
-    except:
-        time.sleep(0.3)
-    try:
-        배너클릭 = driver.find_element(By.CSS_SELECTOR, banner[7]).click()
-        time.sleep(2)
-    except:
-        time.sleep(0.3)
-    try:
-        배너클릭 = driver.find_element(By.CSS_SELECTOR, banner[8]).click()
-        time.sleep(2)
-    except:
-        time.sleep(0.3)
-    try:
-        배너클릭 = driver.find_element(By.CSS_SELECTOR, banner[9]).click()
-        time.sleep(2)
-    except:
-        time.sleep(0.3)
+
+    if 판매채널 == 1:
+        try:
+            배너클릭 = driver.find_element(By.CSS_SELECTOR, banner[1]).click()
+            time.sleep(2)
+            배너클릭 = driver.find_element(By.CSS_SELECTOR, banner[2]).click()
+            time.sleep(2)
+        except:
+            time.sleep(1)
+    if 판매채널 == 2:
+        try:
+            배너클릭 = driver.find_element(By.CSS_SELECTOR, banner[4]).click()
+            time.sleep(2)
+            배너클릭 = driver.find_element(By.CSS_SELECTOR, banner[5]).click()
+            time.sleep(2)
+        except:
+            time.sleep(1)
+    if 판매채널 == 3:
+        try:
+            배너클릭 = driver.find_element(By.CSS_SELECTOR, banner[7]).click()
+            time.sleep(2)
+            배너클릭 = driver.find_element(By.CSS_SELECTOR, banner[8]).click()
+            time.sleep(2)
+        except:
+            time.sleep(1)
+    if 판매채널 == 4:
+        try:
+            배너클릭 = driver.find_element(By.CSS_SELECTOR, banner[10]).click()
+            time.sleep(2)
+            배너클릭 = driver.find_element(By.CSS_SELECTOR, banner[11]).click()
+            time.sleep(2)
+        except:
+            time.sleep(0.3)
+    if 판매채널 == 5:
+        try:
+            배너클릭 = driver.find_element(By.CSS_SELECTOR, banner[13]).click()
+            time.sleep(2)
+            배너클릭 = driver.find_element(By.CSS_SELECTOR, banner[14]).click()
+            time.sleep(2)
+        except:
+            time.sleep(0.3)
+    # try:
+    #     배너클릭 = driver.find_element(By.CSS_SELECTOR, banner[1]).click()
+    #     time.sleep(2)
+    # except:
+    #     time.sleep(0.3)
+    # try:
+    #     배너클릭 = driver.find_element(By.CSS_SELECTOR, banner[2]).click()
+    #     time.sleep(2)
+    # except:
+    #     time.sleep(0.3)
+    # try:
+    #     배너클릭 = driver.find_element(By.CSS_SELECTOR, banner[3]).click()
+    #     time.sleep(2)
+    # except:
+    #     time.sleep(0.3)
+    # try:
+    #     배너클릭 = driver.find_element(By.CSS_SELECTOR, banner[4]).click()
+    #     time.sleep(2)
+    # except:
+    #     time.sleep(0.3)
+    # try:
+    #     배너클릭 = driver.find_element(By.CSS_SELECTOR, banner[5]).click()
+    #     time.sleep(2)
+    # except:
+    #     time.sleep(0.3)
+    # try:
+    #     배너클릭 = driver.find_element(By.CSS_SELECTOR, banner[6]).click()
+    #     time.sleep(2)
+    # except:
+    #     time.sleep(0.3)
+    # try:
+    #     배너클릭 = driver.find_element(By.CSS_SELECTOR, banner[7]).click()
+    #     time.sleep(2)
+    # except:
+    #     time.sleep(0.3)
+    # try:
+    #     배너클릭 = driver.find_element(By.CSS_SELECTOR, banner[8]).click()
+    #     time.sleep(2)
+    # except:
+    #     time.sleep(0.3)
+    # try:
+    #     배너클릭 = driver.find_element(By.CSS_SELECTOR, banner[9]).click()
+    #     time.sleep(2)
+    # except:
+    #     time.sleep(0.3)
     return driver        
 
 def 임시():
