@@ -1351,6 +1351,7 @@ def 배달비올리기():
 
 
 
+
 def 배너클릭(driver,판매채널):
     with open("banner.txt","r",encoding="UTF8") as f:
         banner = f.readlines()
@@ -1649,7 +1650,7 @@ gn_ck = tk.IntVar()
 엔트리.place(x=150,y=60)
 
 오늘만품절 = tk.Button(win, width =12, height=2,text='오늘만품절',command=오늘만품절)
-오늘만품절.place(x=300,y=48)
+오늘만품절.place(x=310,y=48)
 
 품절해제 = tk.Button(win, width =12, height=2,text='품절해제',command=품절해제)
 품절해제.place(x=420,y=48)
