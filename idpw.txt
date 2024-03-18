@@ -13,6 +13,3 @@ GN1002338
 굽네아이디
 1002338
 7911301935
-
-
-document.getElementsByClassName('.button-overlay.css-fowwyy')

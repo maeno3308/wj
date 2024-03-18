@@ -1,0 +1,20 @@
+배민배너
+.bsds-icon-button.bsds-modal-header-button.css-1sh9h6s
+.bsds-button.PopupGuide-module__whC0.css-a2ehx
+땡겨요배너
+input[value="확인"]
+
+요기요배너
+#mf_wfm_side_SMWCO050000P02SHOPP0000040_wframe_btn_close
+
+쿠팡배너
+.dialog-modal-wrapper__body--close-button
+//span[text()="확인"]
+굽네배너
+
+
+text_box.insert('end','죄호된 상품이 없습니다\n') #문자열마직막줄에 입력3
+    text_box.delete(1.0, 100.0)
+
+네이버배너링크
+https://blog.naver.com/maeno/223380205100

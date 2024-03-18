@@ -8,7 +8,8 @@ from tkinter import ttk
 from tkinter.messagebox import *
 import random
 from datetime import datetime, timedelta
-# import pyautogui
+from subprocess import Popen
+import requests
 
 
 from selenium import webdriver
@@ -32,16 +33,18 @@ options.add_argument(f"user-agent={user_agent}")
 # options.add_argument(f"user-data-dir={user_data}")
 options.add_experimental_option("detach", True) # 화면이 꺼지지 않고 유지
 
-# options.add_argument("--start-maximized") # 최대 크기로 시작
+options.add_argument("--start-maximized") # 최대 크기로 시작
 # options.add_argument("--start-fullscreen") # 전체 화면(F11)으로 시작
 # options.add_argument("window-size=500,500") # 화면 크기 지정
+
 # options.add_argument("--headless") # 헤드리스 모드
+
 # options.add_argument("--disable-gpu")
 # options.add_argument("--mute-audio") # 음소거
 # options.add_argument("incognito") # 시크릿 모드
 # options.add_experimental_option("excludeSwitches", ["enable-logging"]) # 불필요한 메세지 제거
 # options.add_experimental_option("excludeSwitches", ["enable-automation"]) # 자동화 메세지 제거
-# service = Service(ChromeDriverManager().install())
+service = Service(ChromeDriverManager().install())
 
 options.add_argument('--disable-blink-features=AutomationControlled')
 # navator.webdriver True 옵션 한줄로 로봇아닌 사람
@@ -67,7 +70,7 @@ def rdtime_23():
 #endregion
 
 
-#region 오늘만품절함수
+#region 오늘만품절
 
 def 오늘만품절 ():
     엔트리값 = 엔트리.get()
@@ -76,24 +79,32 @@ def 오늘만품절 ():
     if 상품명이없다면 == 0 or 상품명이없다면 == 1 :
         showwarning('상품명오류','상품명은 두글자 이상으로 적어주세요')
     else :
+
+        text_box.delete(1.0, 100.0)
+        text_box.insert('end','오늘만품절 검색 할때 다른 상품도 품절이 될 수 있습니다(추후수정예정)\n') #문자열마직막줄에 입력3
         a_result = askquestion('오늘만품절',f'{엔트리값}를 오늘만품절 하시겠습니까?')
+
         if a_result == 'yes':
             if bamin_ck.get() == 1 : # 배민체크되어있는지 확인
                 # print('dd')
                 driver = 배민로그인()
                 배민_오늘만품절(driver)
+                driver.close()
                 
             if tky_ck.get() == 1 : # 배민체크되어있는지 확인
                 driver = 땡겨요로그인()
                 땡겨요_오늘만품절(driver)
+                driver.close()
                 
             if ygy_ck.get() == 1 : # 배민체크되어있는지 확인
                 driver = 요기요로그인()
                 요기요_오늘만품절(driver)
+                driver.close()
                 
             if cp_ck.get() == 1 : # 배민체크되어있는지 확인
                 driver = 쿠팡로그인()
                 쿠팡_오늘만품절(driver)
+                driver.close()
                 
             if gn_ck.get() == 1 : # 배민체크되어있는지 확인
                 # text_box.delete(1.0,20.0)
@@ -101,42 +112,48 @@ def 오늘만품절 ():
 
                 driver = 굽네로그인()
                 굽네_오늘만품절(driver)
+                driver.close()
         else:
             text_box.insert('end','취소했습니다\n') #문자열마직막줄에 입력3
 
     return
 
+def 판매상태_판매중(driver):
+    rdtime_23()
+    판매상태 = driver.find_element(By.XPATH, '//span[text()="판매상태"]').click()
+    rdtime_23()
+    품절 = driver.find_elements(By.CSS_SELECTOR, '.bsds-action-sheet-item.css-1gagrh8')
+    품절[3].click() 
+    rdtime_23()
+    return
+def 판매상태_품절(driver):
+    판매상태 = driver.find_element(By.XPATH, '//span[text()="판매상태"]').click()
+    rdtime_23()
+    품절 = driver.find_elements(By.CSS_SELECTOR, '.bsds-action-sheet-item.css-1gagrh8')
+    품절[4].click() 
+    rdtime_23()
+    return
+
+#endregion
+
+#region 오늘만품절함수
 
 
 def 배민_오늘만품절(driver):
     driver.get('https://self.baemin.com/menu')
     rdtime_23()
     배너클릭(driver,1)
-    rdtime_23()
-    ###################검색어입력
     배민검색어(driver)
-    # try:
-    #     # driver = webdriver.Chrome(options=options)
-    #     rdtime_23()
-    #     엔트리값 = 엔트리.get()
-    #     검색 = driver.find_element(By.CLASS_NAME, 'css-2tifa1')
-    #     rdtime_12()
-    #     검색.send_keys(엔트리값)
-    #     rdtime_12()
-    #     검색.send_keys(Keys.ENTER)
-    #     rdtime_12()     
-    # except:
-    #     text_box.insert('end','검색실패\n') #문자열마직막줄에 입력3
+    판매상태_판매중(driver)
 
-#region 오늘만품절함수
 
-#############################배민상품 판매중선택
-    판매상태 = driver.find_elements(By.CSS_SELECTOR,'.baesisi-icon.bsds-icon.css-1bu3lxy')
-    판매상태[1].click()
-    rdtime_23()
-    판매중 = driver.find_element(By.XPATH, '//*[@id="root"]/div/div[3]/div[2]/div[1]/div[3]/div[2]/div[1]/div[2]/div[1]/div[2]/button[2]/div[2]')
-    판매중.click()
-    rdtime_23()
+# #############################배민상품 판매중선택
+#     판매상태 = driver.find_elements(By.CSS_SELECTOR,'.baesisi-icon.bsds-icon.css-1bu3lxy')
+#     판매상태[1].click()
+#     rdtime_23()
+#     판매중 = driver.find_element(By.XPATH, '//*[@id="root"]/div/div[3]/div[2]/div[1]/div[3]/div[2]/div[1]/div[2]/div[1]/div[2]/button[2]/div[2]')
+#     판매중.click()
+#     rdtime_23()
 
 ##############################베민메뉴품절
     count = 0
@@ -217,20 +234,21 @@ def 배민_오늘만품절(driver):
     옵션클릭 =driver.find_elements(By.CSS_SELECTOR, '.bsds-tab-item.css-1t8gcgu')
     옵션클릭[0].click()
     rdtime_23()
+    배민검색어(driver)
+    판매상태_판매중(driver)
+    # 옵션검색 = driver.find_element(By.CLASS_NAME, 'css-2tifa1')
+    # rdtime_12()
+    # 옵션검색.send_keys('맵달')
+    # rdtime_23()
+    # 옵션검색.send_keys(Keys.ENTER)
+    # rdtime_23()
 
-    옵션검색 = driver.find_element(By.CLASS_NAME, 'css-2tifa1')
-    rdtime_12()
-    옵션검색.send_keys('맵달')
-    rdtime_23()
-    옵션검색.send_keys(Keys.ENTER)
-    rdtime_23()
-
-    판매상태 = driver.find_elements(By.CSS_SELECTOR,'.baesisi-icon.bsds-icon.css-1bu3lxy')
-    판매상태[1].click()
-    rdtime_23()
-    판매중 = driver.find_element(By.XPATH, '//*[@id="root"]/div/div[3]/div[2]/div[1]/div[3]/div[2]/div[1]/div[2]/div[1]/div[2]/button[2]/div[2]')
-    판매중.click()
-    rdtime_23()
+    # 판매상태 = driver.find_elements(By.CSS_SELECTOR,'.baesisi-icon.bsds-icon.css-1bu3lxy')
+    # 판매상태[1].click()
+    # rdtime_23()
+    # 판매중 = driver.find_element(By.XPATH, '//*[@id="root"]/div/div[3]/div[2]/div[1]/div[3]/div[2]/div[1]/div[2]/div[1]/div[2]/button[2]/div[2]')
+    # 판매중.click()
+    # rdtime_23()
 
 #######배민옵션품절
     count = 0
@@ -386,8 +404,8 @@ def 배민_오늘만품절(driver):
                 rdtime_23()
         except:
             time.sleep(1)
-    
-    return
+    # driver.close()
+    return driver
 #endregion
 
 def 땡겨요_오늘만품절(driver):
@@ -445,8 +463,10 @@ def 땡겨요_오늘만품절(driver):
             except:
                 break
     except:
-        rdtime_12()    
-    return
+        rdtime_12()  
+    # driver.close()
+
+    return driver
 
 def 요기요_오늘만품절(driver):
     driver.get('https://ceo.yogiyo.co.kr/soldout/menu')
@@ -490,8 +510,9 @@ def 요기요_오늘만품절(driver):
     except:
         rdtime_12()    
 
+    # driver.close()
     
-    return
+    return driver
 
 def 쿠팡_오늘만품절(driver):
 #################메뉴이동 배너닫기
@@ -547,8 +568,9 @@ def 쿠팡_오늘만품절(driver):
         except:
             break
 
+    # driver.close()
 
-    return
+    return driver
 
 def 굽네_오늘만품절(driver):
 ######################메뉴이동 및 배너클릭 검색
@@ -652,7 +674,9 @@ def 굽네_오늘만품절(driver):
         # rdtime_23()
     except:
         rdtime_12()
-    return
+    # driver.close()
+
+    return driver
 
 #endregion
 
@@ -672,22 +696,27 @@ def 품절해제 ():
                 # print('dd')
                 driver = 배민로그인()
                 배민_품절해제(driver)
+                driver.close()
                 
             if tky_ck.get() == 1 : # 배민체크되어있는지 확인
                 driver = 땡겨요로그인()
                 땡겨요_품절해제(driver)
+                driver.close()
             
             if ygy_ck.get() == 1 : # 배민체크되어있는지 확인
                 driver = 요기요로그인()
                 요기요_품절해제(driver)
+                driver.close()
                 
             if cp_ck.get() == 1 : # 배민체크되어있는지 확인
                 driver = 쿠팡로그인()
                 쿠팡_품절해제(driver)
+                driver.close()
                     
             if gn_ck.get() == 1 : # 배민체크되어있는지 확인
                 driver = 굽네로그인()
                 굽네_품절해제(driver)
+                driver.close()
         else:
             text_box.insert('end','품절 해제를 취소했습니다\n') #문자열마직막줄에 입력3
     return
@@ -703,11 +732,12 @@ def 배민_품절해제(driver):
     rdtime_12()
 #####################배민품절 해제
     try:
-        판매상태 = driver.find_element(By.XPATH, '//span[text()="판매상태"]').click()
-        rdtime_23()
-        품절 = driver.find_elements(By.CSS_SELECTOR, '.bsds-action-sheet-item.css-1gagrh8')
-        품절[4].click() 
-        rdtime_23()
+        # 판매상태 = driver.find_element(By.XPATH, '//span[text()="판매상태"]').click()
+        # rdtime_23()
+        # 품절 = driver.find_elements(By.CSS_SELECTOR, '.bsds-action-sheet-item.css-1gagrh8')
+        # 품절[4].click() 
+        # rdtime_23()
+        판매상태_품절()
         배민옵션품절해제(driver)
     except:
         rdtime_12()
@@ -749,11 +779,12 @@ def 배민_품절해제(driver):
         rdtime_23()
 
 
-        판매상태 = driver.find_element(By.XPATH, '//span[text()="판매상태"]').click()
-        rdtime_23()
-        품절 = driver.find_elements(By.CSS_SELECTOR, '.bsds-action-sheet-item.css-1gagrh8')
-        품절[4].click() 
-        rdtime_23()
+        # 판매상태 = driver.find_element(By.XPATH, '//span[text()="판매상태"]').click()
+        # rdtime_23()
+        # 품절 = driver.find_elements(By.CSS_SELECTOR, '.bsds-action-sheet-item.css-1gagrh8')
+        # 품절[4].click() 
+        # rdtime_23()
+        판매상태_품절()
         배민옵션품절해제(driver)
     except:
         rdtime_12()
@@ -783,7 +814,7 @@ def 배민_품절해제(driver):
     except:
         rdtime_12()    
 
-    return
+    return driver
 
 
 ##################배민함수
@@ -855,7 +886,7 @@ def 땡겨요_품절해제(driver):
                 # rdtime_23()
     except:
         rdtime_12()
-    return
+    return driver
 
 def 요기요_품절해제(driver):
 ###################요기요품절해제
@@ -930,7 +961,7 @@ def 요기요_품절해제(driver):
 
 
 
-    return
+    return driver
 
 def 쿠팡_품절해제(driver):
 
@@ -975,7 +1006,7 @@ def 쿠팡_품절해제(driver):
         except:
             break
         
-    return
+    return driver
 
 def 굽네_품절해제(driver):
     # 배너클릭(driver,5)
@@ -1021,7 +1052,7 @@ def 굽네_품절해제(driver):
     except:
         rdtime_23()
 
-    return
+    return driver
 
 
 
@@ -1030,6 +1061,7 @@ def 굽네_품절해제(driver):
 
 #region 일시정지
 def 일시정지():
+    text_box.delete(1.0, 100.0)
     text_box.insert('end','쿠팡은 일시정지 해지가 되지않아 앱으로 이용하시기 바랍니다\n') #문자열마직막줄에 입력3
     a_result = askquestion('일시정지','운영을 중지 하겠습니까?')
 
@@ -1038,23 +1070,28 @@ def 일시정지():
             # print('dd')
             driver = 배민로그인()
             배민_일시정지(driver)
+            driver.close()
             
         if tky_ck.get() == 1 : # 배민체크되어있는지 확인
             driver = 땡겨요로그인()
             땡겨요_일시정지(driver)
+            driver.close()
             
         if ygy_ck.get() == 1 : # 배민체크되어있는지 확인
             driver = 요기요로그인()
             요기요_일시정지(driver)
+            driver.close()
             
-        if cp_ck.get() == 1 : # 배민체크되어있는지 확인
-            rdtime_12()
-            # driver = 쿠팡로그인()
-            # 쿠팡_오늘만품절(driver)
+        # if cp_ck.get() == 1 : # 배민체크되어있는지 확인
+        #     rdtime_12()
+        #     # driver = 쿠팡로그인()
+        #     # 쿠팡_오늘만품절(driver)
+        #     driver.close()
             
         if gn_ck.get() == 1 : # 배민체크되어있는지 확인
             driver = 굽네로그인()
             굽네_일시정지(driver)
+            driver.close()
     else:
         text_box.insert('end','취소했습니다\n') #문자열마직막줄에 입력3
     return
@@ -1072,7 +1109,7 @@ def 배민_일시정지(driver):
         rdtime_23()
     except:
         rdtime_23()
-    return
+    return driver
 
 
 def 땡겨요_일시정지(driver):
@@ -1095,7 +1132,7 @@ def 땡겨요_일시정지(driver):
         rdtime_23()
     except:
         rdtime_12()
-    return
+    return driver
 
 def 요기요_일시정지(driver):
     try:
@@ -1112,12 +1149,12 @@ def 요기요_일시정지(driver):
         rdtime_23()    
     except:
         rdtime_12()
-    return
+    return driver
 
-def 쿠팡_일시정지(driver):
-    rdtime_12()
-    # 배너클릭(driver)
-    return
+# def 쿠팡_일시정지(driver):
+#     rdtime_12()
+#     # 배너클릭(driver)
+#     return
 
 def 굽네_일시정지(driver):
     # rdtime_12()
@@ -1143,39 +1180,45 @@ def 굽네_일시정지(driver):
         rdtime_23()
     except:
         rdtime_12()
-    return
+    return  driver
 
 #endregion
 
 #region 일시정지해제
 
 def 일시정지해제():
-    text_box.insert('end','쿠팡은 일시정지 해지가 되지않아 앱으로 이용하시기 바랍니다\n') #문자열마직막줄에 입력3
-    a_result = askquestion('일시정지','운영을 중지 하겠습니까?')
+    text_box.delete(1.0, 100.0)
+
+    # text_box.insert('end','쿠팡은 일시정지 해지가 되지않아 앱으로 이용하시기 바랍니다\n') #문자열마직막줄에 입력3
+    a_result = askquestion('일시정지해제','일시정지를 해제 하겠습니까?')
 
     if a_result == 'yes':
         if bamin_ck.get() == 1 : # 배민체크되어있는지 확인
-            # print('dd')
             driver = 배민로그인()
             배민_일시정지해제(driver)
+            driver.close()
             
         if tky_ck.get() == 1 : # 배민체크되어있는지 확인
             driver = 땡겨요로그인()
             땡겨요_일시정지해제(driver)
+            driver.close()
             
         if ygy_ck.get() == 1 : # 배민체크되어있는지 확인
             driver = 요기요로그인()
             요기요_일시정지해제(driver)
+            driver.close()
             
-        if cp_ck.get() == 1 : # 배민체크되어있는지 확인
-            rdtime_12()
+        # if cp_ck.get() == 1 : # 배민체크되어있는지 확인
+        #     rdtime_12()
             # driver = 쿠팡로그인()
             # 쿠팡_오늘만품절(driver)
             
         if gn_ck.get() == 1 : # 배민체크되어있는지 확인
             driver = 굽네로그인()
             굽네_일시정지해제(driver)
+            driver.close()
     else:
+
         text_box.insert('end','취소했습니다\n') #문자열마직막줄에 입력3
     return
 
@@ -1195,29 +1238,33 @@ def 배민_일시정지해제(driver):
         rdtime_23()
     except:
         rdtime_23()
-    return
+    return driver
 
 
 def 땡겨요_일시정지해제(driver):
     #############################영업 임시중지
     rdtime_12()
     배너클릭(driver,2)
-    rdtime_23()
     try:
-        rdtime_23()
         영업임시중지클릭 = driver.find_element(By.CSS_SELECTOR, '#mf_wfm_side_gen_menuParent_0_gen_menuSub_1_btn_child').click()
         rdtime_23()
-        변경 = driver.find_element(By.XPATH,'//input[@value="변경"]').click()
-        # rdtime_23()
-        임시중지 = driver.find_element(By.XPATH,'//label[text()="영업중"]').click()
-        rdtime_23()
-        저장 = driver.find_element(By.XPATH,'//input[@value="저장"]').click()
-        rdtime_23()
-        확인 = driver.find_element(By.XPATH,'//input[@value="확인"]').click()
-        rdtime_23()
+        로그 = driver.find_elements(By.ID, 'mf_wfm_contents_wq_uuid_764')
+        로그2 = (len(로그))
+        if 로그2 == 1:
+            rdtime_23()
+            변경 = driver.find_element(By.XPATH,'//input[@value="변경"]').click()
+            # rdtime_23()
+            임시중지 = driver.find_element(By.XPATH,'//label[text()="영업중"]').click()
+            rdtime_23()
+            저장 = driver.find_element(By.XPATH,'//input[@value="저장"]').click()
+            rdtime_23()
+            확인 = driver.find_element(By.XPATH,'//input[@value="확인"]').click()
+            rdtime_23()
+        else:
+            rdtime_12()
     except:
         rdtime_12()
-    return
+    return driver
 
 def 요기요_일시정지해제(driver):
     try:
@@ -1235,12 +1282,12 @@ def 요기요_일시정지해제(driver):
         # 일시정지 = driver.find_element(By.XPATH, '//button[@type="submit"]').click()
     except:
         rdtime_12()
-    return
+    return driver
 
-def 쿠팡_일시정지해제(driver):
-    rdtime_12()
-    # 배너클릭(driver)
-    return
+# def 쿠팡_일시정지해제(driver):
+#     rdtime_12()
+#     # 배너클릭(driver)
+#     return
 
 def 굽네_일시정지해제(driver):
     # rdtime_12()
@@ -1266,36 +1313,44 @@ def 굽네_일시정지해제(driver):
         rdtime_23()
     except:
         rdtime_12()
-    return
+    return driver
 #endregion
 
 
 #region 댓글달기
 def 댓글달기():
+    text_box.delete(1.0, 100.0)
+    text_box.insert('end','댓글 별 개수에 따른 댓글(추후진행)\n')
+
+
     a_result = askquestion('댓글달기','댓글달기 하겠습니까?')
     if a_result == 'yes':
         if bamin_ck.get() == 1 : # 배민체크되어있는지 확인
             # print('dd')
             driver = 배민로그인()
             배민_댓글달기(driver)
+            driver.close()
             
         if tky_ck.get() == 1 : # 배민체크되어있는지 확인
             driver = 땡겨요로그인()
             땡겨요_댓글달기(driver)
+            driver.close()
             
         if ygy_ck.get() == 1 : # 배민체크되어있는지 확인
             driver = 요기요로그인()
             요기요_댓글달기(driver)
+            driver.close()
             
         if cp_ck.get() == 1 : # 배민체크되어있는지 확인
             rdtime_12()
             driver = 쿠팡로그인()
             쿠팡_댓글달기(driver)
+            driver.close()
             
-        if gn_ck.get() == 1 : # 배민체크되어있는지 확인
+        # if gn_ck.get() == 1 : # 배민체크되어있는지 확인
             # driver = 굽네로그인()
             # 굽네_일시정지(driver)
-            rdtime_12()
+            # rdtime_12()
     else:
         text_box.insert('end','취소했습니다\n') #문자열마직막줄에 입력3
     return
@@ -1367,7 +1422,7 @@ def 배민_댓글달기(driver):
             xx += 1    
     except:
         rdtime_12()
-    return
+    return driver
 
 def 땡겨요_댓글달기(driver):
 # ##############땡겨요 댓글달기
@@ -1405,7 +1460,7 @@ def 땡겨요_댓글달기(driver):
                 break
     except:
         rdtime_12()
-    return
+    return driver
 
 def 요기요_댓글달기(driver):
     #############################요기요 배너클릭
@@ -1456,7 +1511,7 @@ def 요기요_댓글달기(driver):
     except:
         rdtime_12()
 
-    return
+    return driver
 
 def 쿠팡_댓글달기(driver):
     #############################배너클릭중지
@@ -1489,25 +1544,26 @@ def 쿠팡_댓글달기(driver):
 
     except:
         rdtime_12()    
-    return
+    return driver
 
 #endregion
 
 
-#region 여러가지수행함수
 
+#region 여러가지수행함수
 def 배민검색어(driver):
     try:
         rdtime_23()
         엔트리값 = 엔트리.get()
         검색 = driver.find_element(By.CLASS_NAME, 'css-2tifa1')
-        rdtime_12()
+        rdtime_23()
         검색.send_keys(엔트리값)
-        rdtime_12()
+        rdtime_23()
         검색.send_keys(Keys.ENTER)
-        rdtime_12()     
+        rdtime_23()     
     except:
         text_box.insert('end','검색실패\n') #문자열마직막줄에 입력3
+        rdtime_23()
     return
 
 
@@ -1572,6 +1628,16 @@ def 배너클릭(driver,판매채널):
     with open("banner.txt","r",encoding="UTF8") as f:
         banner = f.readlines()
         banner = [line.rstrip('\n') for line in banner]
+
+    # url = 'https://web-html-am952llto0nesa.sel5.cloudtype.app/banner.txt'
+    # response = requests.get(url)
+    # response.encoding='utf-8'
+    # html_text = response.text
+    # shtml = html_text.split('\n')
+    # listc = list(html_text)
+    # print(len(shtml))
+    # print(shtml[0])
+
     if 판매채널 == 1:
         try:
             배너클릭 = driver.find_element(By.CSS_SELECTOR, banner[1]).click()
@@ -1681,7 +1747,7 @@ def 배너클릭(driver,판매채널):
     return driver        
 
 def 임시():
-    time.sleep(1)
+    text_box.delete(1.0, 100.0)
     return
 
 #endregion
@@ -1846,13 +1912,13 @@ def 카카오로그인():
 
 bamin_ck = tk.IntVar()
 배민체크 = tk.Checkbutton(win, text='배 민', variable=bamin_ck)
-# 배민체크.select()
+배민체크.select()
 배민체크.place(x=10, y=10)
 
 
 tky_ck = tk.IntVar()
 땡겨요체크 = tk.Checkbutton(win, text='땡겨요', variable=tky_ck)
-# 땡겨요체크.select()
+땡겨요체크.select()
 땡겨요체크.place(x=80, y=10)
 
 ygy_ck = tk.IntVar()
@@ -1863,26 +1929,36 @@ ygy_ck = tk.IntVar()
 
 cp_ck = tk.IntVar()
 쿠팡체크 = tk.Checkbutton(win, text='쿠 팡', variable=cp_ck)
-# 쿠팡체크.select()
+쿠팡체크.select()
 쿠팡체크.place(x=220, y=10)
 
 
 gn_ck = tk.IntVar()
 굽네홈 = tk.Checkbutton(win, text='굽네홈', variable=gn_ck)
-# 굽네홈.select()
+굽네홈.select()
 굽네홈.place(x=290, y=10)
 
-# kko_ck = tk.IntVar()
-# 카카오체크 = tk.Checkbutton(win, text='카카오', variable=kko_ck)
-# # 카카오체크.select()
-# 카카오체크.place(x=360, y=10)
+def 헤드선택함수():
+
+    # a_result = askquestion('배너값업데이트', '배너값을 업데이트 하시겠습니까?')
+
+    # if a_result == 'yes':
+    if headless.get() == 1:
+        options.add_argument("--headless") # 헤드리스 모드
+    else:
+        time.sleep(0.1)
+    return
+headless = tk.IntVar()
+헤드선택 = tk.Checkbutton(win, text='크롬실행하기', variable=headless, command=헤드선택함수)
+헤드선택.select()
+헤드선택.place(x=400, y=10)
 
 
 상황안내 = tk.Label(win, text='오늘만품절 상품명', width=15)
 상황안내.place(x=30,y=60)
 
 엔트리  = tk.Entry(win, width=20)
-엔트리.insert(0, '맵달')
+# 엔트리.insert(0, '맵달')
 엔트리.place(x=150,y=60)
 
 오늘만품절 = tk.Button(win, width =12, height=2,text='오늘만품절',command=오늘만품절)
@@ -1905,7 +1981,7 @@ gn_ck = tk.IntVar()
 일시정지해제 = tk.Button(win, width =10, height=2,text='일시정지해제',command=일시정지해제)
 일시정지해제.place(x=120,y=150)
 
-댓글달기 = tk.Button(win, width =10, height=2,text='댓글달기',command=임시)
+댓글달기 = tk.Button(win, width =10, height=2,text='댓글달기',command=댓글달기)
 댓글달기.place(x=220,y=150)
 
 # 배달비올리기 = tk.Button(win, width =10, height=2,text='배달비올리기',command=임시)
@@ -1925,24 +2001,52 @@ text_box.insert('end', notice)
 
 
 
-선택콤보 = ttk.Combobox(win, width=10, state='readonly')
-선택콤보 ['values'] = ['요일선택','일시중지','댓글달기','대행중지','대행개시']
-선택콤보.current(0)
-선택콤보.place(x=20,y=550)
+# 선택콤보 = ttk.Combobox(win, width=10, state='readonly')
+# 선택콤보 ['values'] = ['요일선택','일시중지','댓글달기','대행중지','대행개시']
+# 선택콤보.current(0)
+# 선택콤보.place(x=20,y=550)
 
 
-
-아이디_비번 = tk.Button(win, width =15, height=2,text='아이디_비번',command=임시)
+def 아이디비번():
+    Popen(['notepad','idpw.txt'])
+    return
+아이디_비번 = tk.Button(win, width =15, height=2,text='아이디수정',command=아이디비번)
 아이디_비번.place(x=20,y=640)
 
-댓글 = tk.Button(win, width =15, height=2,text='댓 글',command=임시)
-댓글.place(x=150,y=640)
+def 댓글수정():
+    Popen(['notepad','g_comment.txt'])
+    return
+댓글수정 = tk.Button(win, width =15, height=2,text='댓글수정',command=댓글수정)
+댓글수정.place(x=150,y=640)
 
-발주하기 = tk.Button(win, width =15, height=2,text='발주하기(창)',command=임시)
-발주하기.place(x=280,y=640)
+# 발주하기 = tk.Button(win, width =15, height=2,text='발주하기(창)',command=임시)
+# 발주하기.place(x=280,y=640)
 
-오늘매출 = tk.Button(win, width =15, height=2,text='오늘매출',command=임시)
-오늘매출.place(x=410,y=640)
+
+
+
+def 배너값업데이트():
+
+    a_result = askquestion('배너값업데이트', '배너값을 업데이트 하시겠습니까?')
+    if a_result == 'yes':
+        url = 'https://web-html-am952llto0nesa.sel5.cloudtype.app/banner.txt'
+        re = requests.get(url)
+        re.encoding='utf-8'
+        html_text = re.text
+        shtml = html_text.split('\n')
+
+        listc = list(shtml)
+
+        with open('banner.txt','w',encoding='utf-8') as file:
+
+            xxxx = 0
+            for i in shtml:
+                # print(listc[xxxx])
+                file.write(listc[xxxx])
+                xxxx += 1
+        return
+배너값 = tk.Button(win, width =15, height=2,text='배너값_업데이트',command=배너값업데이트)
+배너값.place(x=410,y=640)
 
 win.mainloop()
 #endregion
